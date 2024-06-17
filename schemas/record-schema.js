@@ -1,8 +1,8 @@
-const Schema = mongoose.Schema;
+// const Schema = mongoose.Schema;
 
-const record = new Schema({
-  id: String,
-  value: Number,
-  date: `data tranzactie`,
-  category: String,
-});
+// const record = new Schema({
+//   id: String,
+//   value: Number,
+//   date: `data tranzactie`,
+//   category: String,
+// });
