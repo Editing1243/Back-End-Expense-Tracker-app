@@ -1,16 +1,16 @@
 // Require Modules
-const StatusCodes = require(`http-status-codes`);
+
 const express = require("express");
 const app = express();
 
-const getAllAccountsRouter = require(`./routes/accounts`);
+const accountRoutes = require("./routes/accountsRoutes");
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // custom routes
-app.use(`/`, getAllAccountsRouter);
+app.use("/", accountRoutes);
 
 // Creating port and listen to the server
 const PORT = 5000;

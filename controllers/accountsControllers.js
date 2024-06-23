@@ -1,3 +1,5 @@
+const StatusCodes = require(`http-status-codes`);
+
 let accounts = [
   {
     id: 1,
@@ -16,36 +18,59 @@ let accounts = [
   },
 ];
 
-// app.get(`/`, (req, res) => {
-//     res.send(`Am trimis info de la server catre utilizator. IN SFARSIT !`);
-//   });
+const getHomepage = async (req, res) => {
+  res.json(accounts);
+};
 
 const getAllAccounts = async (req, res) => {
   res.json(accounts);
 };
 
-module.exports = { getAllAccounts, accounts };
+const getAccountId = async (req, res) => {
+  const accountId = Number(req.params.id);
+  const getAccountId = accounts.filter((acc) => acc.id === accountId);
 
-//   app.get(`/accounts`, (req, res) => {
-//     res.json(accounts);
-//   });
+  if (!accountId) {
+    res.status(StatusCodes.NOT_FOUND).send(`Cannot find account Id`);
+  } else {
+    res.json(getAccountId);
+  }
+};
 
-///////////////////////////////////////////////////
+const getAccountName = async (req, res) => {
+  const accountName = String(req.params.name);
+  const getAccountName = accounts.filter((acc) => acc.username === accountName);
 
-//   app.get(`/accounts/id/:id`, (req, res) => {
-//     const accountId = Number(req.params.id);
-//     const getAccountByID = accounts.filter((acc) => acc.id === accountId);
+  if (!accountName) {
+    res.status(StatusCodes.NOT_FOUND).send(`Cannot find account username`);
+  } else {
+    res.json(getAccountName);
+  }
+};
 
-//     if (!getAccountByID) {
-//       res
-//         .status(StatusCodes.NOT_FOUND)
-//         .send(`Account ID not found. Please try again`);
-//     } else {
-//       res.json(getAccountByID);
-//     }
-//   });
+const getAccountRole = async (req, res) => {
+  const accountRole = String(req.params.role);
+  const getAccountRole = accounts.filter((acc) => acc.role === accountRole);
 
-///////////////////////////////////////////
+  if (!accountRole) {
+    console.log(`not found`);
+    res.status(StatusCodes.NOT_FOUND).send(`Cannot find account role `);
+  } else {
+    console.log(`found`);
+    res.json(getAccountRole);
+  }
+};
+
+module.exports = {
+  getAllAccounts,
+  getHomepage,
+  getAccountId,
+  getAccountName,
+  getAccountRole,
+};
+
+// error - send bad status code + message
+// success- send json response to interface
 
 // app.get(`/accounts/user/:user`, (req, res) => {
 //   const accountUser = String(req.params.user);
