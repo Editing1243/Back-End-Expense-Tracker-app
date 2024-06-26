@@ -24,6 +24,7 @@ const getHomepage = async (req, res) => {
 
 const getAllAccounts = async (req, res) => {
   res.json(accounts);
+  console.log(accounts);
 };
 
 const getAccountId = async (req, res) => {
@@ -61,52 +62,35 @@ const getAccountRole = async (req, res) => {
   }
 };
 
+const post = async (req, res) => {
+  const newAccount = req.body;
+  accounts.push(newAccount);
+  res.json(newAccount);
+  console.log(newAccount);
+};
+
+const put = async (req, res) => {
+  const name = req.params.name;
+  const body = req.body;
+  const account = accounts.find((acc) => acc.username === name);
+
+  if (!account) {
+    res.status(StatusCodes.NOT_FOUND).send(`account not found by usernamme`);
+  } else {
+    const updateAccount = { ...account, ...body };
+    const index = accounts.indexOf(account);
+    accounts[index] = updateAccount;
+
+    res.json(updateAccount);
+  }
+};
+
 module.exports = {
   getAllAccounts,
   getHomepage,
   getAccountId,
   getAccountName,
   getAccountRole,
+  post,
+  put,
 };
-
-// error - send bad status code + message
-// success- send json response to interface
-
-// app.get(`/accounts/user/:user`, (req, res) => {
-//   const accountUser = String(req.params.user);
-//   const getAccountByUser = accounts.filter(
-//     (acc) => acc.username === accountUser
-//   );
-
-//   if (!getAccountByUser) {
-//     res
-//       .status(StatusCodes.NOT_FOUND)
-//       .send(`Account user not found. Please try again`);
-//   } else {
-//     res.json(getAccountByUser);
-//   }
-// });
-
-/////////////////////////////////////////////////////////////////////
-
-// app.get(`/accounts/role/:role`, (req, res) => {
-//   const accountRole = String(req.params.role);
-//   const getAccountByRole = accounts.filter((acc) => acc.role === accountRole);
-
-//   if (!accountRole) {
-//     res
-//       .status(StatusCodes.NOT_FOUND)
-//       .send(`Account role not found. Please try again`);
-//   } else {
-//     res.json(getAccountByRole);
-//   }
-// });
-
-//////////////////////////////////////////////////////////////////////////////
-
-// app.post(`/accounts`, (req, res) => {
-//   const newAccount = req.body;
-//   accounts.push(newAccount);
-
-//   res.json(newAccount);
-// });

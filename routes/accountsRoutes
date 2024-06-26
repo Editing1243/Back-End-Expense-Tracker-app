@@ -8,6 +8,8 @@ const {
   getAccountId,
   getAccountName,
   getAccountRole,
+  post,
+  put,
 } = require(`../controllers/accountsControllers`);
 
 router
@@ -16,5 +18,8 @@ router
   .get(`/accounts/id/:id`, getAccountId)
   .get(`/accounts/name/:name`, getAccountName)
   .get(`/accounts/role/:role`, getAccountRole);
+
+router.post(`/accounts`, post);
+router.put(`/accounts/name/:name`, put);
 
 module.exports = router;

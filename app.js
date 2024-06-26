@@ -19,11 +19,6 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-// 1) Routes and endpoints
-
-// termin rutele notate in routes si ma asigur ca merg
-// ma ocup si de put si delete si testez
-
 // 2) MongoDB Atlas :
 
 // - Cum populez proiectul express app cu date
