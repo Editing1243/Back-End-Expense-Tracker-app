@@ -2,24 +2,7 @@ const express = require(`express`);
 
 const router = express.Router();
 
-const {
-  getHomepage,
-  getAllAccounts,
-  getAccountId,
-  getAccountName,
-  getAccountRole,
-  post,
-  put,
-} = require(`../controllers/accountsControllers`);
+const { createAccount } = require(`../controllers/accountsControllers`);
 
-router
-  .get(`/`, getHomepage)
-  .get(`/accounts`, getAllAccounts)
-  .get(`/accounts/id/:id`, getAccountId)
-  .get(`/accounts/name/:name`, getAccountName)
-  .get(`/accounts/role/:role`, getAccountRole);
-
-router.post(`/accounts`, post);
-router.put(`/accounts/name/:name`, put);
-
+router.post(`/accounts`, createAccount);
 module.exports = router;
