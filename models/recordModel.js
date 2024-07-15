@@ -3,7 +3,7 @@ const recordSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    ecnum: [`expense`, `income`],
+    enum: [`expense`, `income`],
     message: `Chose Type only between expense or income`,
   },
   value: { type: Number, required: true },
@@ -25,6 +25,18 @@ const recordSchema = new mongoose.Schema({
   cathegory: {
     type: String,
     required: true,
+    enum: [
+      `rent`,
+      `house expenses`,
+      `cleaning products`,
+      `health`,
+      `food`,
+      `other leisures`,
+      `hobby`,
+      `monthly income`,
+      `external help`,
+    ],
+    message: `Chose Type only between the designated options`,
   },
 });
 

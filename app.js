@@ -16,8 +16,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // custom routes
-app.use("/", recordsRoutes);
-app.use("/", accountRoutes);
+app.use("/records", recordsRoutes);
+app.use("/auth", accountRoutes);
 
 // Connect database
 mongoose
@@ -47,58 +47,44 @@ app.listen(port, () => {
 
 ////////////////////////
 
-// Model record : _id, type, sum cathegory, date
-// Model account : user, email, password
+// 1) Accounts :
 
-// Post record
-// Get all records
-// Delete all records
+// - Acount login/register
+// - Make sure each account has individual separate data from different accounts
+// and test if individual account data persist across the database, for each individual account
 
-// Authentication :
-// Register
-// Login
-// Post record
-// Get all records
-// Sign out
+// Post one (register account)
+// Post one (login account)
+// Get all accounts
+// Get one Account
+// Delete Account
+// Sign Out
 
-// Register other user
-// Login
-// Post record
-// Get all records
-// Compare to the other user
-// Sign out
+// !! Test if data is different for each individual account by signing in to one account, posting and deleting,
+// singing into another different acount, repeating posting and deleting
+// then siginig in to the first account and veryfing the state of its data
+// then siginig in to the second account and veryfing the state of its data
+// !!! they must be different from each other and reflect the changes as you remember before signing out of each one
 
-// Login first user
-// Post/delete/see all data
-// Compare data to second user
-// Sign off
+// 2) Records :
 
-// Login second user
-// Post/delete/see all data
-// Compare data to firsr user
+// Post/Create record
+// Get all
+// get one
+// patch
+// Get by Cathegory
+// Get by Type : Expense/Income
+// Delete one
+// Delete all
 
-// If data persists we good to go. Ma apuc de implementat ce mi-a dat Tomas !!!
+// - Optional 1 : Get by date (interval zi/luna/an)
 
-/////////////////////////////////////////////////////////////////////////////////////////////
+// - Opțional 2: Situație profit/loss
 
-// create methods :
+// !! Îl intreb pe Tomas daca fac asta ca http method in backend sau o lasam xa funcție de front-end
 
-// - Post record
-// - Get all records
-// - Get record by Date (filter date interval)
-// - Get record by type of expense (only income/expense : make them the only avalible values)
-// - Get record by category
-// - Delete record
-// - Delete all records
-// - Update record
-
-// TEST THEM ALL ON DIFFERENT ACCOUNTS
-// CHECK IF DATA PERSIST ACROSS DIFFERENT ACCOUNTS
-
-// Opțional  !
-
-// Aplicația trebuie să afiseze aceste date sub forma unei situatii P/L (profit & loss)
-
-// - sum all values of all income type records
-// - sum all values of all expense type records
-// all income records values sum - all expense records values sum = balance
+// sum expenses values
+// sum incomes values
+// Incomes sum - expenses sum
+// - sa calculeze asta dinamic in functie de toate records pe utilizator.
+// Daca șterg sau adaug record cu different value pe utilizator sa imi calculeze asta dinamic la orice record
