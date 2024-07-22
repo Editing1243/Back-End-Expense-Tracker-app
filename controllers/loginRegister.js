@@ -8,7 +8,16 @@ const getAllAccounts = async (req, res) => {
 };
 
 const register = async (req, res) => {
-  res.send(`new user has been registered`);
+  const { user, email, password } = req.body;
+  if (!user || !email || !password) {
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .send(`please provide user, email and password`);
+  }
+
+  const account = await Account.create({ ...req.body });
+  res.status(StatusCodes.CREATED).json(account);
+  console.log(account);
   console.log(`new user has been registered`);
 };
 
@@ -32,11 +41,17 @@ const deleteAccount = async (req, res) => {
   console.log(`user account has been deleted`);
 };
 
+const deleteAllAccounts = async (req, res) => {
+  res.send(`all users accounts have been deleted`);
+  console.log(`all users accounts have been deleted`);
+};
+
 module.exports = {
   getAllAccounts,
   register,
   login,
   logout,
   deleteAccount,
+  deleteAllAccounts,
   updateAccount,
 };

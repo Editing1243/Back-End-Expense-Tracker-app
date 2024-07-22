@@ -41,8 +41,15 @@ const deleteRecord = async (req, res) => {
 };
 
 const deleteAllRecords = async (req, res) => {
-  res.send(`Delete all records`);
-  console.log(`Delete all records`);
+  try {
+    await Record.deleteMany({});
+    res.status(StatusCodes.OK).send(`All records deleted`);
+    console.log(`All records deleted`);
+  } catch (err) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(`${err} - could not delete records`);
+  }
 };
 
 module.exports = {
