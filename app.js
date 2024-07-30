@@ -1,9 +1,10 @@
 // Require Modules
 
+require(`dotenv`).config();
 const express = require("express");
 const mongoose = require(`mongoose`);
+const Account = require(`./models/accountModel`);
 
-require(`dotenv`).config();
 const app = express();
 
 // import custom modules
@@ -22,8 +23,26 @@ app.use("/auth", accountRoutes);
 // Connect database
 mongoose
   .connect(MONGO_URI, {})
-  .then(() => console.log(`Database conection success`))
-  .catch((err) => console.log(err));
+  .then(async () => {
+    console.log("Connected to MongoDB");
+    try {
+      await Account.init(); // Ensure indexes are created
+      console.log("Indexes are created");
+      await Account.syncIndexes();
+      console.log("Indexes are synchronized");
+      console.log("JWT_SECRET:", process.env.JWT_SECRET);
+    } catch (err) {
+      console.error("Error creating indexes:", err);
+    }
+  })
+  .catch((err) => {
+    console.error("Error connecting to MongoDB:", err);
+  });
+
+// mongoose
+//   .connect(MONGO_URI, {})
+//   .then(() => console.log(`Database conection success`))
+//   .catch((err) => console.log(err));
 
 // Creating port and listen to the server
 const port = process.env.PORT || 5000;
@@ -49,35 +68,27 @@ app.listen(port, () => {
 
 // 1) Accounts :
 
-// - Acount login/register
-// - Make sure each account has individual separate data from different accounts
-// and test if individual account data persist across the database, for each individual account
+// Get/See all accounts
+// update account
+// Log out account
+// Delete one Account
 
-// Post one (register account)
-// Post one (login account)
-// Get all accounts
-// Get one Account
-// Delete Account
-// Sign Out
-
-// !! Test if data is different for each individual account by signing in to one account, posting and deleting,
-// singing into another different acount, repeating posting and deleting
-// then siginig in to the first account and veryfing the state of its data
-// then siginig in to the second account and veryfing the state of its data
-// !!! they must be different from each other and reflect the changes as you remember before signing out of each one
+// Date diferite pe conturi diferite, date unice specifice fiecarui cont in parte
+// Obligatie de a fi logat pe cont sa vezi datele specifice unui cont
 
 // 2) Records :
 
 // Post/Create record
 // Get all
-// get one
-// patch
+// get one by id
+// patch one by id
 // Get by Cathegory
 // Get by Type : Expense/Income
-// Delete one
-// Delete all
 
 // - Optional 1 : Get by date (interval zi/luna/an)
+// - Optional 1 : Delete by date (interval zi/luna/an)
+
+///////////////////////////////////////////////////////////////////////////
 
 // - Opțional 2: Situație profit/loss
 

@@ -12,6 +12,7 @@ const {
   getRecordCat,
   getRecordDate,
   deleteAllRecords,
+  deleteRecordbyDate,
 } = require(`../controllers/recordsControllers`);
 
 //  DE REFERINTA MOMENTAN , TREBUIE SCHIMBATE FUNCTIILE IN CONTROLLERS
@@ -26,6 +27,7 @@ router.get(`/date/:date`, getRecordDate);
 router.post(`/`, postRecord);
 router.patch(`/id/:id`, updateRecord);
 router.delete(`/id/:id`, deleteRecord);
+router.delete(`/date/:date`, deleteRecordbyDate);
 router.delete(`/`, deleteAllRecords);
 
 module.exports = router;

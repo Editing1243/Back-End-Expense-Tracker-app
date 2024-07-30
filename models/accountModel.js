@@ -1,6 +1,15 @@
 const mongoose = require(`mongoose`);
+const bcrypt = require(`bcryptjs`);
+
+const jwt = require(`jsonwebtoken`);
+const JWT_SECRET = process.env.JWT_SECRET;
+
 const accountSchema = new mongoose.Schema({
-  user: { type: String, required: [true, `Please provide valid User`] },
+  user: {
+    type: String,
+    required: [true, `Please provide valid User`],
+    // [true, `Please provide User`],
+  },
   email: {
     type: String,
     required: [true, `Please provide valid email adress`],
@@ -8,9 +17,32 @@ const accountSchema = new mongoose.Schema({
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
       "Please provide a valid email",
     ],
+    // [true, `Please provide an email adress`]
   },
   password: { type: String, required: [true, `Please provide valid password`] },
 });
+
+accountSchema.pre(`save`, async function () {
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
+
+accountSchema.methods.createToken = function () {
+  return (token = jwt.sign(
+    {
+      accountId: this._id,
+      user: this.user,
+      email: this.email,
+    },
+    JWT_SECRET,
+    {}
+  ));
+};
+
+accountSchema.methods.comparePasswords = async function (password) {
+  const isMatch = await bcrypt.compare(password, this.password);
+  return isMatch;
+};
 
 const Account = mongoose.model(`Account`, accountSchema);
 

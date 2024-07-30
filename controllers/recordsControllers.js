@@ -40,6 +40,11 @@ const deleteRecord = async (req, res) => {
   console.log(`Delete a single record`);
 };
 
+const deleteRecordbyDate = async (req, res) => {
+  res.send(`Delete a single record by date`);
+  console.log(`Delete a single record by date`);
+};
+
 const deleteAllRecords = async (req, res) => {
   try {
     await Record.deleteMany({});
@@ -62,4 +67,5 @@ module.exports = {
   getRecordType,
   getRecordCat,
   getRecordDate,
+  deleteRecordbyDate,
 };

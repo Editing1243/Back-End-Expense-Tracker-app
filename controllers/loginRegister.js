@@ -1,4 +1,3 @@
-const jwt = require(`jsonwebtoken`);
 const StatusCodes = require(`http-status-codes`);
 const Account = require(`../models/accountModel`);
 
@@ -8,15 +7,14 @@ const getAllAccounts = async (req, res) => {
 };
 
 const register = async (req, res) => {
-  const { user, email, password } = req.body;
-  if (!user || !email || !password) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .send(`please provide user, email and password`);
-  }
-
   const account = await Account.create({ ...req.body });
-  res.status(StatusCodes.CREATED).json(account);
+
+  const token = account.createToken();
+
+  res.status(StatusCodes.CREATED).json({
+    account: { user: account.user, email: account.email },
+    token,
+  });
   console.log(account);
   console.log(`new user has been registered`);
 };
@@ -27,8 +25,36 @@ const updateAccount = (req, res) => {
 };
 
 const login = async (req, res) => {
-  res.send(`existing user has logged in`);
-  console.log(`existing user has logged in`);
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .send(`please provide email and password`);
+    }
+
+    const account = await Account.findOne({ email });
+
+    if (!account) {
+      res.status(StatusCodes.UNAUTHORIZED).send(`Invalid credentials`);
+    }
+
+    const passwordTest = await account.comparePasswords(password);
+
+    if (!passwordTest) {
+      res.status(StatusCodes.UNAUTHORIZED).send(`Invalid credentials`);
+    }
+
+    const token = account.createToken();
+    res.status(StatusCodes.OK).json({ account: { user: account.user }, token });
+  } catch (error) {
+    console.error("Error during login:", error);
+
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ msg: "An error occurred. Please try again later." });
+  }
 };
 
 const logout = async (req, res) => {
@@ -42,8 +68,14 @@ const deleteAccount = async (req, res) => {
 };
 
 const deleteAllAccounts = async (req, res) => {
-  res.send(`all users accounts have been deleted`);
-  console.log(`all users accounts have been deleted`);
+  try {
+    await Account.deleteMany({});
+    res.status(StatusCodes.OK).send(`all users accounts have been deleted`);
+    console.log(`all users accounts have been deleted`);
+  } catch (error) {
+    console.error("Error deleting user accounts:", error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(`Internal server error`);
+  }
 };
 
 module.exports = {
