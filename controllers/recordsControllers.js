@@ -2,9 +2,9 @@ const StatusCodes = require(`http-status-codes`);
 const Record = require(`../models/recordModel`);
 
 const postRecord = async (req, res) => {
-  res.send(`Create a new record`);
-  console.log(`Create a new record`);
+  return res.json(req.account);
 };
+
 const getAllRecords = async (req, res) => {
   res.send(`Get all the records`);
   console.log(`Get all the records`);

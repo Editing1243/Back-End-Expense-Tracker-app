@@ -2,6 +2,8 @@ const express = require(`express`);
 
 const router = express.Router();
 
+const authenticateAccount = require("../middleware/authentication");
+
 const {
   getAllRecords,
   getRecordId,

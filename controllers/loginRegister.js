@@ -11,7 +11,7 @@ const register = async (req, res) => {
 
   const token = account.createToken();
 
-  res.status(StatusCodes.CREATED).json({
+  return res.status(StatusCodes.CREATED).json({
     account: { user: account.user, email: account.email },
     token,
   });
@@ -29,7 +29,7 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      res
+      return res
         .status(StatusCodes.BAD_REQUEST)
         .send(`please provide email and password`);
     }
@@ -37,7 +37,7 @@ const login = async (req, res) => {
     const account = await Account.findOne({ email });
 
     if (!account) {
-      res.status(StatusCodes.UNAUTHORIZED).send(`Invalid credentials`);
+      return res.status(StatusCodes.UNAUTHORIZED).send(`Invalid credentials`);
     }
 
     const passwordTest = await account.comparePasswords(password);
@@ -47,7 +47,9 @@ const login = async (req, res) => {
     }
 
     const token = account.createToken();
-    res.status(StatusCodes.OK).json({ account: { user: account.user }, token });
+    return res
+      .status(StatusCodes.OK)
+      .json({ account: { user: account.user }, token });
   } catch (error) {
     console.error("Error during login:", error);
 

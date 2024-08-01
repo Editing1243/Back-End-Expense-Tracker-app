@@ -1,4 +1,4 @@
-// Require Modules
+// Require Packages
 
 require(`dotenv`).config();
 const express = require("express");
@@ -11,14 +11,15 @@ const app = express();
 const recordsRoutes = require("./routes/recordsRoutes.js");
 const accountRoutes = require("./routes/accountRoutes.js");
 const MONGO_URI = process.env.MONGO_URI;
+const authenticateAccount = require("./middleware/authentication");
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // custom routes
-app.use("/records", recordsRoutes);
 app.use("/auth", accountRoutes);
+app.use("/records", authenticateAccount, recordsRoutes);
 
 // Connect database
 mongoose
@@ -39,12 +40,7 @@ mongoose
     console.error("Error connecting to MongoDB:", err);
   });
 
-// mongoose
-//   .connect(MONGO_URI, {})
-//   .then(() => console.log(`Database conection success`))
-//   .catch((err) => console.log(err));
-
-// Creating port and listen to the server
+// Connect to port
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
