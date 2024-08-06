@@ -1,18 +1,51 @@
+// patch one by id-
+
+// Get all-
+// get one by id-
+// Get by Type : Expense/Income-
+// Get by Cathegory-
+
+// - Dinamic JWT sa nu mai dau copy paste la fiecare in postman - opt
+
+// - Optional 1 : Get by date (interval zi/luna/an)-
+// - Delete by id-
+// - Optional 1 : Delete by date (interval zi/luna/an)
+
+// status codes, job model, request
+
 const StatusCodes = require(`http-status-codes`);
 const Record = require(`../models/recordModel`);
 
 const postRecord = async (req, res) => {
-  return res.json(req.account);
+  req.body.createdBy = req.account.accountId;
+  const record = await Record.create(req.body);
+  res.status(StatusCodes.CREATED).json({ ...record });
+};
+
+const updateRecord = async (req, res) => {
+  res.send(`Update a record`);
+  console.log(`Update a record`);
 };
 
 const getAllRecords = async (req, res) => {
-  res.send(`Get all the records`);
-  console.log(`Get all the records`);
+  const records = await Record.find({ createdBy: req.account.accountId }).sort(
+    `createdAt`
+  );
+  res.status(StatusCodes.OK).json({ records });
 };
 
 const getRecordId = async (req, res) => {
-  res.send(`Get single record by Id`);
-  console.log(`Get single record by Id`);
+  const {
+    account: { accountId },
+    params: { id: recordId },
+  } = req;
+
+  const record = await Record.findOne({ _id: recordId, createdBy: accountId });
+
+  if (!record) {
+    res.status(StatusCodes.NOT_FOUND).send(`invalid record Id ${recordId}`);
+  }
+  res.status(StatusCodes.OK).json(record);
 };
 
 const getRecordType = async (req, res) => {
@@ -28,11 +61,6 @@ const getRecordCat = async (req, res) => {
 const getRecordDate = async (req, res) => {
   res.send(`Get record by date interval`);
   console.log(`Get record by date interval`);
-};
-
-const updateRecord = async (req, res) => {
-  res.send(`Update a record`);
-  console.log(`Update a record`);
 };
 
 const deleteRecord = async (req, res) => {

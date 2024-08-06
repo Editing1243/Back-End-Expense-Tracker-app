@@ -65,12 +65,9 @@ app.listen(port, () => {
 // 1) Accounts :
 
 // Get/See all accounts
-// update account
-// Log out account
+// update account - opt
 // Delete one Account
-
-// Date diferite pe conturi diferite, date unice specifice fiecarui cont in parte
-// Obligatie de a fi logat pe cont sa vezi datele specifice unui cont
+// Dinamic JWT sa nu mai dau copy paste la fiecare in postman - opt
 
 // 2) Records :
 

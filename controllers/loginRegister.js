@@ -1,3 +1,10 @@
+// 1) Accounts :
+
+// Get/See all accounts-
+// update account - opt-
+// Delete one Account-
+// Dinamic JWT sa nu mai dau copy paste la fiecare in postman - opt
+
 const StatusCodes = require(`http-status-codes`);
 const Account = require(`../models/accountModel`);
 
