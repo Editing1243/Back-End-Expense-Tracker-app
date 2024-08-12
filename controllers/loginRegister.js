@@ -1,10 +1,5 @@
 // 1) Accounts :
 
-// Get/See all accounts-
-// update account - opt-
-// Delete one Account-
-// Dinamic JWT sa nu mai dau copy paste la fiecare in postman - opt
-
 const StatusCodes = require(`http-status-codes`);
 const Account = require(`../models/accountModel`);
 
@@ -24,11 +19,6 @@ const register = async (req, res) => {
   });
   console.log(account);
   console.log(`new user has been registered`);
-};
-
-const updateAccount = (req, res) => {
-  res.send(`User account has been updated`);
-  console.log(`User account has been updated`);
 };
 
 const login = async (req, res) => {
@@ -66,11 +56,6 @@ const login = async (req, res) => {
   }
 };
 
-const logout = async (req, res) => {
-  res.send(`you have logout from your account`);
-  console.log(`you have logout from your account`);
-};
-
 const deleteAccount = async (req, res) => {
   res.send(`user account has been deleted`);
   console.log(`user account has been deleted`);
@@ -91,8 +76,7 @@ module.exports = {
   getAllAccounts,
   register,
   login,
-  logout,
+
   deleteAccount,
   deleteAllAccounts,
-  updateAccount,
 };

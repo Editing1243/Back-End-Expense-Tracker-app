@@ -1,17 +1,10 @@
-// patch one by id-
+// ----- 8.48
 
-// Get all-
-// get one by id-
-// Get by Type : Expense/Income-
-// Get by Cathegory-
-
-// - Dinamic JWT sa nu mai dau copy paste la fiecare in postman - opt
-
-// - Optional 1 : Get by date (interval zi/luna/an)-
-// - Delete by id-
-// - Optional 1 : Delete by date (interval zi/luna/an)
-
-// status codes, job model, request
+// Get by Type : Expense/Income
+// Get by Cathegory
+// Delete all - functia inregistrare sa stearga doar din contul curent
+// - Optional 1 : Get by date (interval zi/luna/an) , sau dupa data fixa
+// - Optional 1 : Delete by date (interval zi/luna/an), sau dupa data fixa
 
 const StatusCodes = require(`http-status-codes`);
 const Record = require(`../models/recordModel`);
@@ -23,8 +16,37 @@ const postRecord = async (req, res) => {
 };
 
 const updateRecord = async (req, res) => {
-  res.send(`Update a record`);
-  console.log(`Update a record`);
+  const {
+    body: { type, value, date, cathegory },
+    account: { accountId },
+    params: { id: recordId },
+  } = req;
+
+  if (type === `` || value === `` || date === `` || cathegory === ``) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .send(`Please provide valid record fields info`);
+  }
+  console.log(`body works`);
+
+  const record = await Record.findByIdAndUpdate(
+    {
+      _id: recordId,
+      createdBy: accountId,
+    },
+    req.body,
+    { new: true, runValidators: true }
+  );
+
+  console.log(`record works`);
+
+  if (!record) {
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .send(`no record with id ${recordId}`);
+  }
+
+  res.status(StatusCodes.OK).json(record);
 };
 
 const getAllRecords = async (req, res) => {
@@ -64,8 +86,22 @@ const getRecordDate = async (req, res) => {
 };
 
 const deleteRecord = async (req, res) => {
-  res.send(`Delete a single record`);
-  console.log(`Delete a single record`);
+  const {
+    account: { accountId },
+    params: { id: recordId },
+  } = req;
+
+  const record = await Record.findByIdAndDelete({
+    _id: recordId,
+    createdBy: accountId,
+  });
+
+  if (!record) {
+    res.status(StatusCodes.NOT_FOUND).send(`please provide valid record Id`);
+  }
+  res
+    .status(StatusCodes.OK)
+    .send(`Record with id ${recordId} has been deleted`);
 };
 
 const deleteRecordbyDate = async (req, res) => {

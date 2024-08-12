@@ -58,29 +58,6 @@ app.listen(port, () => {
 
 //////////////////////
 
-// PLAN
-
-////////////////////////
-
-// 1) Accounts :
-
-// Get/See all accounts
-// update account - opt
-// Delete one Account
-// Dinamic JWT sa nu mai dau copy paste la fiecare in postman - opt
-
-// 2) Records :
-
-// Post/Create record
-// Get all
-// get one by id
-// patch one by id
-// Get by Cathegory
-// Get by Type : Expense/Income
-
-// - Optional 1 : Get by date (interval zi/luna/an)
-// - Optional 1 : Delete by date (interval zi/luna/an)
-
 ///////////////////////////////////////////////////////////////////////////
 
 // - Opțional 2: Situație profit/loss
