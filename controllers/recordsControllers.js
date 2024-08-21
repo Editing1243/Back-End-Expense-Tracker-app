@@ -1,10 +1,5 @@
-// --Ce a ramas de facut
-
-// Get by Type : Expense/Income
-// Get by Cathegory
-// Delete all - functia inregistrare sa stearga doar din contul curent
-// - Optional 1 : Get by date (interval zi/luna/an) , sau dupa data fixa
-// - Optional 1 : Delete by date (interval zi/luna/an), sau dupa data fixa
+// Get by date (interval zi/luna/an) , sau dupa data fixa
+// Delete by date (interval zi/luna/an), sau dupa data fixa
 
 const StatusCodes = require(`http-status-codes`);
 const Record = require(`../models/recordModel`);
@@ -71,18 +66,76 @@ const getRecordId = async (req, res) => {
 };
 
 const getRecordType = async (req, res) => {
-  res.send(`Get record by type expense/income`);
-  console.log(`Get record by type expense/income`);
+  const {
+    account: { accountId },
+    params: { type: recodType },
+  } = req;
+
+  const record = await Record.find({
+    type: recodType,
+    createdBy: accountId,
+  });
+
+  if (!record) {
+    res.status(StatusCodes.NOT_FOUND).send(`invalid record Id ${recordId}`);
+  }
+  res.status(StatusCodes.OK).json(record);
 };
 
 const getRecordCat = async (req, res) => {
-  res.send(`Get record by Cathegory expense or income`);
-  console.log(`Get record by Cathegory expense or income`);
+  const {
+    account: { accountId },
+    params: { cathegory: recordCat },
+  } = req;
+  console.log(`function works`);
+  const record = await Record.find({
+    cathegory: recordCat,
+    createdBy: accountId,
+  });
+  console.log(`record found`);
+
+  if (record.length === 0) {
+    res.status(StatusCodes.NOT_FOUND).send(`invalid record Id ${recordId}`);
+  }
+  res.status(StatusCodes.OK).json(record);
 };
 
+//////////////////////////////////////////////////////////////////////
+
 const getRecordDate = async (req, res) => {
-  res.send(`Get record by date interval`);
-  console.log(`Get record by date interval`);
+  const {
+    account: { accountId },
+    params: { date: recordDateString },
+  } = req;
+
+  const [year, month, day] = recordDateString.split("-").map(Number);
+
+  if (!year || !month || !day) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .send("Please provide a valid date in the format YYYY-MM-DD");
+  }
+
+  try {
+    const records = await Record.find({
+      "date.year": year,
+      "date.month": month,
+      "date.day": day,
+      createdBy: accountId,
+    });
+
+    if (records.length === 0) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .send("No records found for the given date");
+    }
+
+    res.status(StatusCodes.OK).json(records);
+  } catch (error) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send("Error retrieving records");
+  }
 };
 
 const deleteRecord = async (req, res) => {
@@ -105,13 +158,44 @@ const deleteRecord = async (req, res) => {
 };
 
 const deleteRecordbyDate = async (req, res) => {
-  res.send(`Delete a single record by date`);
-  console.log(`Delete a single record by date`);
+  const {
+    account: { accountId },
+    params: { date: recordDateString },
+  } = req;
+
+  const [year, month, day] = recordDateString.split("-").map(Number);
+
+  if (!year || !month || !day) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .send("Please provide a valid date in the format YYYY-MM-DD");
+  }
+
+  try {
+    const records = await Record.deleteMany({
+      "date.year": year,
+      "date.month": month,
+      "date.day": day,
+      createdBy: accountId,
+    });
+
+    if (records.length === 0) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .send("No records found for the given date");
+    }
+
+    res.status(StatusCodes.OK).json(records);
+  } catch (error) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send("Error retrieving records");
+  }
 };
 
 const deleteAllRecords = async (req, res) => {
   try {
-    await Record.deleteMany({});
+    await Record.deleteMany({ createdBy: req.account.accountId });
     res.status(StatusCodes.OK).send(`All records deleted`);
     console.log(`All records deleted`);
   } catch (err) {

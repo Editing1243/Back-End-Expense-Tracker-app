@@ -17,9 +17,6 @@ const {
   deleteRecordbyDate,
 } = require(`../controllers/recordsControllers`);
 
-//  DE REFERINTA MOMENTAN , TREBUIE SCHIMBATE FUNCTIILE IN CONTROLLERS
-//  ACESTEA VOR FI FEATURES ASA CUM MI-A ZIS TOMAS
-
 router.get(`/`, getAllRecords);
 router.get(`/id/:id`, getRecordId);
 router.get(`/type/:type`, getRecordType);
