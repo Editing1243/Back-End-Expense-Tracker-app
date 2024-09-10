@@ -57,15 +57,3 @@ app.listen(port, () => {
 // MONGO_URI=mongodb+srv://stefanolteanu1995:0ydGt7tvI2oEdA4r@cluster0.hzxxrdi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 
 //////////////////////
-
-///////////////////////////////////////////////////////////////////////////
-
-// - Opțional 2: Situație profit/loss
-
-// !! Îl intreb pe Tomas daca fac asta ca http method in backend sau o lasam xa funcție de front-end
-
-// sum expenses values
-// sum incomes values
-// Incomes sum - expenses sum
-// - sa calculeze asta dinamic in functie de toate records pe utilizator.
-// Daca șterg sau adaug record cu different value pe utilizator sa imi calculeze asta dinamic la orice record
